@@ -5,29 +5,34 @@ import { GroceriesServiceService } from '../groceries-service.service';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  styleUrls: ['tab1.page.scss'],
+  template:`
+   <select [(ngModel)]="firstSelectValue">
+    <option *ngFor="let opt of firstSelectOptions" [value]="opt">
+       {{ opt }}
+    </option>
+   </select> 
+  `,
 })
+
 export class Tab1Page {
   [x: string]: any;
 
   title = "Grocery";
+  
+  private opts = [
+    { key: 'one', value: [1,2,3,4,5,6,7,8,9,10] }
+  ];
+  
+  firstSelectValue = 'one';
 
+  get firstSelectOptions() {
+    return this.opts.map(({key}) => key);
+  }
   items = [
     {
       name: "Milk",
       quantity: 2
-    },
-    {
-      name: "Bread",
-      quantity: 3
-    },
-    {
-      name: "Eggs",
-      quantity: 12
-    },
-    {
-      name: "Cheese",
-      quantity: 4
     },
   ];
   constructor(public navCtrl: NavController, 
@@ -36,7 +41,7 @@ export class Tab1Page {
               public dataService: GroceriesServiceService) {}
 
   async loadItems() {
-    return this.items;
+    this.dataService.getItems();
   }
   async removeItem(item: any, index: any) {
     console.log("Successfully removed item - ", item, index);
@@ -72,7 +77,8 @@ export class Tab1Page {
         },
         {
         name: "quantity",
-        placeholder: "Quantity"
+        placeholder: "quantity",
+        value:  
         },
               ],
       buttons: [
